@@ -1,17 +1,11 @@
-
-
-using System.ComponentModel.DataAnnotations;
-namespace backend_01.Core.Models
+namespace backend_01.Core.Model
 {
     public class User
-{
-    [Key]
-    public int Id { get; set; }
-        [Required]
-        public string? Username { get; set; }
-
-        [EmailAddress][Required]
-        public string? Email{ get; set; }
-
-}
+    {
+        public int Id { get; set; }
+        public string? UserName { get; set; } = string.Empty;
+        public string? Email { get; set; } = string.Empty;
+        public string? Password { get; set; } = string.Empty;
+        public DateTime createdAt { get; set; } = DateTime.Now;
+    }
 }
