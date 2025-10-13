@@ -54,6 +54,7 @@ ScaffoldingReadMe.txt
 # Secret / environment files
 .env
 .env.local
+appsettings.json
 appsettings.Development.json
 
 # Test result folders
