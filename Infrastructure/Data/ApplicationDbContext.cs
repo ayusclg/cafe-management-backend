@@ -1,16 +1,15 @@
-
-
+using backend_01.Core.Model;
 using Microsoft.EntityFrameworkCore;
-using backend_01.Core.Models;
-namespace backend_01.Infrastructure.Data {
 
-
+namespace backend_01.Infrastructure.Data
+{
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
+        {
 
-    public DbSet<User> Users { get; set; }
+        }
+        public DbSet<User> Users { get; set; }
     }
+    
 }
