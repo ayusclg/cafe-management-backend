@@ -1,4 +1,4 @@
-using backend_01.Core.Model;
+using backend_01.Core.User.Model;
 using backend_01.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,7 @@ namespace backend_01.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task<User> CreateUser(User user)
+        public async Task<UserModel> CreateUser(UserModel user)
         {
            try
            {
@@ -27,11 +27,11 @@ namespace backend_01.Infrastructure.Repository
            }
         }
         
-        public async Task<List<User>> GetUsers()
+        public async Task<List<UserModel>> GetUsers()
         {
             try
             {
-                List<User> users= await _context.Users.Take(10).ToListAsync()
+                List<UserModel> users= await _context.Users.Take(10).ToListAsync()
                 ;
                 return users;
             }

@@ -1,4 +1,5 @@
-using backend_01.Core.Model;
+using backend_01.Core.Menu.Model;
+using backend_01.Core.User.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend_01.Infrastructure.Data
@@ -9,7 +10,8 @@ namespace backend_01.Infrastructure.Data
         {
 
         }
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserModel> Users { get; set; }
+        public DbSet<MenuModel>Menus{ get; set; }
     }
     
 }
