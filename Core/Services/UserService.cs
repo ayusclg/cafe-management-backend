@@ -1,5 +1,8 @@
 using backend_01.Core.Model;
 using backend_01.Infrastructure.Repository;
+using BCrypt.Net;
+using backend_01.Presentation.Request.User.Dto;
+using backend_01.Presentation.Response.User.Dto ;
 
 namespace backend_01.Core.Service
 {
@@ -12,10 +15,27 @@ namespace backend_01.Core.Service
             _userRepo = userRepository;
         }
 
-        public async Task<User> CreateUser(User user)
+        public async Task<UserResponse.CreateUser> CreateUser(UserRequest.CreateUser user)
         {
-            var result = await _userRepo.CreateUser(user);
-            return (result);
+            string password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            
+            var newuser = new User
+            {
+                UserName=user.UserName,
+                Email=user.Email,
+                Password=password,
+                CreatedAt= DateTime.UtcNow,
+            };
+            var result = await _userRepo.CreateUser(newuser);
+            var res = new UserResponse.CreateUser()
+            {
+                Id = result.Id,
+                UserName = result.UserName,
+                Email = result.Email,
+                CreatedAt = result.CreatedAt,
+
+            };
+            return res;
         }
     }
 }
