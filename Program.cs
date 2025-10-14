@@ -15,10 +15,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 //register controller support 
 builder.Services.AddControllers();
+
 //this connects the db and the application with connection string
+
+
 builder.Services.AddScoped<UserRepository, UserRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 //swagger implementation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
