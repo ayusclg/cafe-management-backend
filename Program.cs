@@ -1,4 +1,5 @@
 using backend_01.Infrastructure.Data;
+using backend_01.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 //create a builder first
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 //this connects the db and the application with connection string
+builder.Services.AddScoped<UserRepository, UserRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 //this is for the documentation
