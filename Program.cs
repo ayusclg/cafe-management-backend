@@ -1,8 +1,10 @@
 using Microsoft.OpenApi.Models;
-using backend_01.Core.Service;
+using backend_01.Core.User.Service;
 using backend_01.Infrastructure.Data;
 using backend_01.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
+using backend_01.Infrastructure.Menu.Repository;
+using backend_01.Core.Menu.Service;
 
 
 
@@ -20,6 +22,7 @@ builder.Services.AddControllers();
 
 
 builder.Services.AddScoped<UserRepository, UserRepository>();
+builder.Services.AddScoped<MenuRepository, MenuRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -38,6 +41,7 @@ builder.Services.AddSwaggerGen(c =>
 
 //registering userService
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<MenuService>();
 //this is for the documentation
 
 

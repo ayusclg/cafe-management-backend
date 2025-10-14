@@ -1,10 +1,10 @@
-using backend_01.Core.Model;
+using backend_01.Core.User.Model;
 using backend_01.Infrastructure.Repository;
 using BCrypt.Net;
 using backend_01.Presentation.Request.User.Dto;
 using backend_01.Presentation.Response.User.Dto ;
 
-namespace backend_01.Core.Service
+namespace backend_01.Core.User.Service
 {
     public class UserService
     {
@@ -19,7 +19,7 @@ namespace backend_01.Core.Service
         {
             string password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             
-            var newuser = new User
+            var newuser = new UserModel
             {
                 UserName=user.UserName,
                 Email=user.Email,

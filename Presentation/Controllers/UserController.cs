@@ -1,10 +1,10 @@
-using backend_01.Core.Model;
-using backend_01.Core.Service;
+ 
+using backend_01.Core.User.Service;
 using backend_01.Presentation.Request.User.Dto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend_01.Presentation.Controller
+namespace backend_01.Presentation.User.Controller
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
@@ -17,7 +17,7 @@ namespace backend_01.Presentation.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> createUser([FromBody]  UserRequest.CreateUser user)
+        public async Task<IActionResult> CreateUser([FromBody]  UserRequest.CreateUser user)
         {
             var res = await _userService.CreateUser(user);
             return Ok(res);

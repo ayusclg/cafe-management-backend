@@ -1,6 +1,6 @@
-namespace backend_01.Core.Model
+namespace backend_01.Core.User.Model
 {
-    public class User
+    public class UserModel
     {
         public int Id { get; set; }
         public required string UserName { get; set; }   
