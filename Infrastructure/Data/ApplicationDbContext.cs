@@ -11,7 +11,12 @@ namespace backend_01.Infrastructure.Data
 
         }
         public DbSet<UserModel> Users { get; set; }
-        public DbSet<MenuModel>Menus{ get; set; }
+        public DbSet<MenuModel> Menus { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserModel>().Property(O => O.Role).HasConversion<string>();
+        }
     }
     
 }

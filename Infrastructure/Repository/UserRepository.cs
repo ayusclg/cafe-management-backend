@@ -31,7 +31,7 @@ namespace backend_01.Infrastructure.Repository
         {
             try
             {
-                List<UserModel> users= await _context.Users.Take(10).ToListAsync()
+                var users= await _context.Users.Take(10).ToListAsync()
                 ;
                 return users;
             }

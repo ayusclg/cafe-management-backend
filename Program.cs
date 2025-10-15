@@ -1,22 +1,28 @@
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Models; 
 using backend_01.Core.User.Service;
 using backend_01.Infrastructure.Data;
 using backend_01.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using backend_01.Infrastructure.Menu.Repository;
 using backend_01.Core.Menu.Service;
+using System.Text.Json.Serialization;
 
 
 
 //create a builder first
 var builder = WebApplication.CreateBuilder(args);
 
-//inject the services after builder is created and before app instacnce is created.
+//inject the services after builder is created and before app instance is created.
 
 
-
+ 
 //register controller support 
-builder.Services.AddControllers();
+ 
+builder.Services.AddControllers() 
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 //this connects the db and the application with connection string
 
@@ -38,9 +44,9 @@ builder.Services.AddSwaggerGen(c =>
         Description = "User Management API with PostgreSQL"
     });
 });
-
+  
 //registering userService
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<UserService>(); 
 builder.Services.AddScoped<MenuService>();
 //this is for the documentation
 
@@ -53,11 +59,12 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend_01 API v1");
-        c.RoutePrefix = string.Empty;
+        c.RoutePrefix = "swagger";
     });
 app.UseHttpsRedirection();
+app.UseRouting();
 app.MapGet("/", () => "Hello From Asp.net Core Backend");
 app.MapControllers();
 
 //run the app at last
-app.Run();
+app.Run(); 

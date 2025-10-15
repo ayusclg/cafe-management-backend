@@ -21,10 +21,11 @@ namespace backend_01.Core.User.Service
             
             var newuser = new UserModel
             {
-                UserName=user.UserName,
-                Email=user.Email,
-                Password=password,
-                CreatedAt= DateTime.UtcNow,
+                UserName = user.UserName,
+                Email = user.Email,
+                Password = password,
+                CreatedAt = DateTime.UtcNow,
+                Role=user.Role,    
             };
             var result = await _userRepo.CreateUser(newuser);
             var res = new UserResponse.CreateUser()
@@ -33,6 +34,8 @@ namespace backend_01.Core.User.Service
                 UserName = result.UserName,
                 Email = result.Email,
                 CreatedAt = result.CreatedAt,
+                Role=result.Role
+
 
             };
             return res;
