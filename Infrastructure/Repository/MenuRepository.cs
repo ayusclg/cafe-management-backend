@@ -16,7 +16,7 @@ namespace backend_01.Infrastructure.Menu.Repository
            try
            {
                 await _context.Menus.AddAsync(menu);
-                await _context.SaveChangesAsync();
+               await _context.SaveChangesAsync();
                  return menu;
            }
            catch ( Exception ex)
