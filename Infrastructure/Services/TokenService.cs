@@ -1,11 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace backend_01.Infrastructure.Token.Service
 {
-    
+
     public class TokenService
     {
         private readonly IConfiguration _config;
@@ -14,14 +15,14 @@ namespace backend_01.Infrastructure.Token.Service
             _config = config;
         }
 
-        public string GenerateAccessToken(string id,string name , string email , string role)
+        public string GenerateAccessToken(int id, string name, string email)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub,id),
                 new Claim(JwtRegisteredClaimNames.Name,name),
                 new Claim(JwtRegisteredClaimNames.Email,email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim("userId",id.ToString())
 
             };
 
@@ -36,8 +37,20 @@ namespace backend_01.Infrastructure.Token.Service
                     signingCredentials: creds
             );
             var tokenHandler = new JwtSecurityTokenHandler();
-            var jwt = tokenHandler.WriteToken(token);
-            return jwt;
+            var accessToken = tokenHandler.WriteToken(token);
+            return accessToken;
+        }
+
+        public string generateRefreshToken()
+        {
+            var randomBytes = new Byte[64];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomBytes);
+            }
+
+            return Convert.ToBase64String(randomBytes);
         }
     }
+    
 }

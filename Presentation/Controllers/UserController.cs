@@ -1,6 +1,7 @@
  
 using backend_01.Core.User.Service;
 using backend_01.Presentation.Request.User.Dto;
+using backend_01.Presentation.Response.User.Dto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,16 @@ namespace backend_01.Presentation.User.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody]  UserRequest.CreateUser user)
+        public async Task<IActionResult> CreateUser([FromBody] UserRequest.CreateUser user)
         {
             var res = await _userService.CreateUser(user);
+            return Ok(res);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> login ([FromBody] UserRequest.LoginUser user)
+        {
+            var res = await _userService.login(user);
             return Ok(res);
         }
     }
