@@ -34,9 +34,7 @@ namespace backend_01.Core.User.Service
                 UserName = result.UserName,
                 Email = result.Email,
                 CreatedAt = result.CreatedAt,
-                Role=result.Role
-
-
+                Role=result.Role 
             };
             return res;
         }

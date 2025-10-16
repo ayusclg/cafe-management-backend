@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using backend_01.Infrastructure.Menu.Repository;
 using backend_01.Core.Menu.Service;
 using System.Text.Json.Serialization;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using backend_01.Infrastructure.Token.Service;
 
 
 
@@ -27,6 +32,28 @@ builder.Services.AddControllers()
 //this connects the db and the application with connection string
 
 
+
+//this is the jwt that verify the incoming token
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:iss"],
+        ValidAudience = builder.Configuration["Jwt:aud"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"]!)),
+        ClockSkew = TimeSpan.Zero
+    };
+});
+builder.Services.AddAuthorization();
 builder.Services.AddScoped<UserRepository, UserRepository>();
 builder.Services.AddScoped<MenuRepository, MenuRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -44,8 +71,9 @@ builder.Services.AddSwaggerGen(c =>
         Description = "User Management API with PostgreSQL"
     });
 });
-  
+
 //registering userService
+builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<UserService>(); 
 builder.Services.AddScoped<MenuService>();
 //this is for the documentation
@@ -62,6 +90,8 @@ app.UseSwaggerUI(c =>
         c.RoutePrefix = "swagger";
     });
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseRouting();
 app.MapGet("/", () => "Hello From Asp.net Core Backend");
 app.MapControllers();
