@@ -15,23 +15,23 @@ namespace backend_01.Infrastructure.Repository
 
         public async Task<UserModel> CreateUser(UserModel user)
         {
-           try
-           {
-             await _context.Users.AddAsync(user);
-             await _context.SaveChangesAsync();
-             return user;
-           }
-           catch (Exception ex)
-           {
+            try
+            {
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
                 throw new Exception($"Internal Server Error, Message:{ex.Message}");
-           }
+            }
         }
-        
+
         public async Task<List<UserModel>> GetUsers()
         {
             try
             {
-                var users= await _context.Users.Take(10).ToListAsync()
+                var users = await _context.Users.Take(10).ToListAsync()
                 ;
                 return users;
             }
@@ -40,6 +40,17 @@ namespace backend_01.Infrastructure.Repository
 
                 throw new Exception($"Internal Server Error,Message:{ex.Message}");
             }
+        }
+
+        public async Task<UserModel?> checkEmail(string email)
+        {
+            var isUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return isUser;
+        }
+
+        public async Task<bool> checkPassword(string password, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
     }
 }

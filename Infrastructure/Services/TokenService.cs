@@ -14,14 +14,14 @@ namespace backend_01.Infrastructure.Token.Service
             _config = config;
         }
 
-        public string GenerateAccessToken(string id,string name , string email , string role)
+        public string GenerateAccessToken(int id,string name , string email  )
         {
             var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub,id),
+            { 
                 new Claim(JwtRegisteredClaimNames.Name,name),
                 new Claim(JwtRegisteredClaimNames.Email,email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim("userId",id.ToString()) 
 
             };
 
