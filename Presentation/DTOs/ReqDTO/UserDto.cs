@@ -14,8 +14,7 @@ namespace backend_01.Presentation.Request.User.Dto{
             [JsonConverter(typeof(JsonStringEnumConverter))]
             public required Roles Role { get; set; }
         }
-        
-        public class LoginUser
+         public class LoginUser
         {
             public required string Email { get; set; }
             public required string Password{ get; set; }

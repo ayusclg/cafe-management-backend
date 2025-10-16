@@ -5,6 +5,7 @@ using backend_01.Presentation.Request.User.Dto;
 using backend_01.Presentation.Response.User.Dto ;
 using Microsoft.AspNetCore.Http.HttpResults;
 using backend_01.Infrastructure.Token.Service;
+using backend_01.Infrastructure.Data;
 
 namespace backend_01.Core.User.Service
 {
@@ -13,10 +14,13 @@ namespace backend_01.Core.User.Service
         private readonly UserRepository _userRepo;
         private readonly TokenService _token;
 
-        public UserService(UserRepository userRepository,TokenService token)
+        private readonly ApplicationDbContext _context;
+
+        public UserService(UserRepository userRepository,TokenService token,ApplicationDbContext context)
         {
             _userRepo = userRepository;
             _token = token;
+            _context = context;
         }
 
         public async Task<UserResponse.CreateUser> CreateUser(UserRequest.CreateUser user)
@@ -58,6 +62,11 @@ namespace backend_01.Core.User.Service
 
 
             var accessToken = _token.GenerateAccessToken(dbUser.Id, dbUser.UserName, dbUser.Email);
+            var refreshToken = _token.generateRefreshToken();
+
+            dbUser.RefreshToken = refreshToken;
+             _context.Users.Update(dbUser);
+            await _context.SaveChangesAsync();
             var loginRes = new UserResponse.LoginUser()
             {
                 Id = dbUser.Id,
@@ -65,6 +74,7 @@ namespace backend_01.Core.User.Service
                 Email = dbUser.Email,
                 role = dbUser.Role,
                 AccessToken = accessToken,
+                RefreshToken=refreshToken
 
             };
             return loginRes;
