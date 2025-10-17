@@ -58,7 +58,7 @@ namespace backend_01.Infrastructure.Repository
             try
             {
                 var userRes = await _context.Users.FindAsync(id);
-                if(userRes == null)
+                if (userRes == null)
                 {
                     throw new Exception("User Is Null");
                 }
@@ -66,9 +66,10 @@ namespace backend_01.Infrastructure.Repository
             }
             catch (Exception ex)
             {
-                
-                throw new Exception ($"Repository Error In Getting User,{ex.Message}");
+
+                throw new Exception($"Repository Error In Getting User,{ex.Message}");
             }
         }
+        
     }
 }

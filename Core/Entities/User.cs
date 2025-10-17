@@ -10,6 +10,7 @@ namespace backend_01.Core.User.Model
         public required string Password { get; set; } 
         public required Roles Role { get; set; }
         public string? RefreshToken { get; set; }
+        public string? CashierPin{ get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
     public enum Roles{

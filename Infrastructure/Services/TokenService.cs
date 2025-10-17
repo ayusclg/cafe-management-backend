@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using backend_01.Core.User.Model;
 using Microsoft.IdentityModel.Tokens;
 
 namespace backend_01.Infrastructure.Token.Service
@@ -15,13 +16,14 @@ namespace backend_01.Infrastructure.Token.Service
             _config = config;
         }
 
-        public string GenerateAccessToken(int id, string name, string email)
+        public string GenerateAccessToken(int id, string name, string email,string role)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Name,name),
                 new Claim(JwtRegisteredClaimNames.Email,email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role,role),
                 new Claim("userId",id.ToString())
 
             };

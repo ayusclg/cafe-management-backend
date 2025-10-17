@@ -6,6 +6,8 @@ using backend_01.Presentation.Response.User.Dto ;
 using Microsoft.AspNetCore.Http.HttpResults;
 using backend_01.Infrastructure.Token.Service;
 using backend_01.Infrastructure.Data;
+using System.Security.Cryptography;
+using backend_01.Migrations;
 
 namespace backend_01.Core.User.Service
 {
@@ -61,7 +63,7 @@ namespace backend_01.Core.User.Service
             }
 
 
-            var accessToken = _token.GenerateAccessToken(dbUser.Id, dbUser.UserName, dbUser.Email);
+            var accessToken = _token.GenerateAccessToken(dbUser.Id, dbUser.UserName, dbUser.Email,dbUser.Role.ToString());
             var refreshToken = _token.generateRefreshToken();
 
             dbUser.RefreshToken = refreshToken;
@@ -80,7 +82,7 @@ namespace backend_01.Core.User.Service
             return loginRes;
 
         }
-        
+
         public async Task<UserResponse.GetUser> getMyself(int id)
         {
             var user = await _userRepo.getMyself(id);
@@ -93,6 +95,41 @@ namespace backend_01.Core.User.Service
                 CreatedAt = user.CreatedAt,
             };
             return res;
+        }
+
+         public async Task<UserModel> getUserAllDetails(int id)
+        {
+            var requestedUser = await _userRepo.getMyself(id);
+            return requestedUser; 
+        }
+         public async Task<string> createCashierPin(UserRequest.CreatePin pin,int Id)
+        {
+            var createdCashierPin = string.Empty;
+            if (string.IsNullOrWhiteSpace(pin.Pin))
+            {
+                var bytes = new byte[4];
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(bytes);
+                    int value = BitConverter.ToInt32(bytes, 0) & 0x7FFFFFFF;
+                    var newValue = value % 9000 + 1000;
+                    createdCashierPin = Convert.ToString(newValue);
+                }
+            }
+            else
+            {
+                createdCashierPin = pin.Pin;
+            }
+            var cashierDetails = await _userRepo.getMyself(Id);
+            if (cashierDetails == null)
+            {
+                throw new Exception("Casher Not Found");
+            }
+            cashierDetails.CashierPin = createdCashierPin;
+            _context.Users.Update(cashierDetails);
+            await _context.SaveChangesAsync();
+            return createdCashierPin;
+            
         }
     }
 }
