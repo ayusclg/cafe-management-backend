@@ -23,7 +23,7 @@ namespace backend_01.Core.User.Service
             _context = context;
         }
 
-        public async Task<UserResponse.CreateUser> CreateUser(UserRequest.CreateUser user)
+        public async Task<UserResponse.GetUser> CreateUser(UserRequest.CreateUser user)
         {
             string password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
@@ -36,7 +36,7 @@ namespace backend_01.Core.User.Service
                 Role = user.Role,
             };
             var result = await _userRepo.CreateUser(newUser);
-            var res = new UserResponse.CreateUser()
+            var res = new UserResponse.GetUser()
             {
                 Id = result.Id,
                 UserName = result.UserName,
@@ -46,11 +46,11 @@ namespace backend_01.Core.User.Service
             };
             return res;
         }
-        
+
         public async Task<UserResponse.LoginUser> login(UserRequest.LoginUser user)
         {
             var dbUser = await _userRepo.checkEmail(user.Email);
-            if(dbUser == null)
+            if (dbUser == null)
             {
                 throw new Exception("No User Found");
             }
@@ -65,7 +65,7 @@ namespace backend_01.Core.User.Service
             var refreshToken = _token.generateRefreshToken();
 
             dbUser.RefreshToken = refreshToken;
-             _context.Users.Update(dbUser);
+            _context.Users.Update(dbUser);
             await _context.SaveChangesAsync();
             var loginRes = new UserResponse.LoginUser()
             {
@@ -74,11 +74,25 @@ namespace backend_01.Core.User.Service
                 Email = dbUser.Email,
                 role = dbUser.Role,
                 AccessToken = accessToken,
-                RefreshToken=refreshToken
+                RefreshToken = refreshToken
 
             };
             return loginRes;
-                
+
+        }
+        
+        public async Task<UserResponse.GetUser> getMyself(int id)
+        {
+            var user = await _userRepo.getMyself(id);
+            var res = new UserResponse.GetUser()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                Role = user.Role,
+                CreatedAt = user.CreatedAt,
+            };
+            return res;
         }
     }
 }
