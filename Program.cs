@@ -14,6 +14,7 @@ using backend_01.Infrastructure.Token.Service;
 
 
 
+
 //create a builder first
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +71,35 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "User Management API with PostgreSQL"
     });
+    
+    // THIS PART IS CRITICAL - Add JWT Authentication to Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
 });
 
 //registering userService
@@ -90,9 +120,9 @@ app.UseSwaggerUI(c =>
         c.RoutePrefix = "swagger";
     });
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseRouting();
 app.MapGet("/", () => "Hello From Asp.net Core Backend");
 app.MapControllers();
 
