@@ -1,26 +1,26 @@
 using backend_01.Core.User.Model;
 using backend_01.Infrastructure.Data;
-using backend_01.Presentation.Request.User.Dto;
+using backend_01.Presentation.Request.Staff.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend_01.Infrastructure.Repository
 {
-    public class UserRepository
+    public class StaffRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public UserRepository(ApplicationDbContext context)
+        public StaffRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<UserModel> CreateUser(UserModel user)
+        public async Task<StaffModel> CreateStaff(StaffModel staff)
         {
             try
             {
-                await _context.Users.AddAsync(user);
+                await _context.Staffs.AddAsync(staff);
                 await _context.SaveChangesAsync();
-                return user;
+                return staff;
             }
             catch (Exception ex)
             {
@@ -28,11 +28,11 @@ namespace backend_01.Infrastructure.Repository
             }
         }
 
-        public async Task<List<UserModel>> GetUsers()
+        public async Task<List<StaffModel>> GetStaffs()
         {
             try
             {
-                var users = await _context.Users.Take(10).ToListAsync()
+                var users = await _context.Staffs.Take(10).ToListAsync()
                 ;
                 return users;
             }
@@ -43,31 +43,31 @@ namespace backend_01.Infrastructure.Repository
             }
         }
 
-        public async Task<UserModel?> checkEmail(string email)
+        public async Task<StaffModel?> checkEmail(string email)
         {
-            var isUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            return isUser;
+            var isStaff = await _context.Staffs.FirstOrDefaultAsync(u => u.Email == email);
+            return isStaff;
         }
 
         public async Task<bool> checkPassword(string password, string hashedPassword)
         {
             return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
-        public async Task<UserModel> getMyself(int id)
+        public async Task<StaffModel> getMyself(int id)
         {
             try
             {
-                var userRes = await _context.Users.FindAsync(id);
-                if (userRes == null)
+                var staffRes = await _context.Staffs.FindAsync(id);
+                if (staffRes == null)
                 {
-                    throw new Exception("User Is Null");
+                    throw new Exception("Staff Is Null");
                 }
-                return userRes;
+                return staffRes;
             }
             catch (Exception ex)
             {
 
-                throw new Exception($"Repository Error In Getting User,{ex.Message}");
+                throw new Exception($"Repository Error In Getting Staff,{ex.Message}");
             }
         }
         

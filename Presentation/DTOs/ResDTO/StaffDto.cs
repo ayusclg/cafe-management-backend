@@ -1,11 +1,11 @@
 using System.Text.Json.Serialization;
 using backend_01.Core.User.Model;
 
-namespace backend_01.Presentation.Response.User.Dto
+namespace backend_01.Presentation.Response.Staff.Dto
 {
-    public class UserResponse
+    public class StaffResponse
     {
-        public class GetUser
+        public class GetStaff
         {
             public required int Id { get; set; }
             public required string UserName { get; set; }
@@ -15,7 +15,7 @@ namespace backend_01.Presentation.Response.User.Dto
             public required DateTime CreatedAt { get; set; }
         }
         
-        public class LoginUser{
+        public class LoginStaff{
             public required int Id { get; set; }
             public required string UserName { get; set; }
             public required string Email { get; set; }

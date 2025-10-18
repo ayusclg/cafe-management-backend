@@ -4,7 +4,7 @@ using backend_01.Core.Category.Model;
 
 namespace backend_01.Core.User.Model
 {
-    public class UserModel
+    public class StaffModel
     {
         public int Id { get; set; }
         public required string UserName { get; set; }

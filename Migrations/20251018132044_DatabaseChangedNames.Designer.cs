@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend_01.Infrastructure.Data;
@@ -12,9 +13,11 @@ using backend_01.Infrastructure.Data;
 namespace backend_01.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251018132044_DatabaseChangedNames")]
+    partial class DatabaseChangedNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,7 +121,7 @@ namespace backend_01.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Staffs");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("backend_01.Core.Category.Model.CategoryModel", b =>
