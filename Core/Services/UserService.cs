@@ -1,8 +1,8 @@
 using backend_01.Core.User.Model;
 using backend_01.Infrastructure.Repository;
 using BCrypt.Net;
-using backend_01.Presentation.Request.User.Dto;
-using backend_01.Presentation.Response.User.Dto ;
+using backend_01.Presentation.Request.Staff.Dto;
+using backend_01.Presentation.Response.Staff.Dto ;
 using Microsoft.AspNetCore.Http.HttpResults;
 using backend_01.Infrastructure.Token.Service;
 using backend_01.Infrastructure.Data;
@@ -11,34 +11,34 @@ using System.Security.Cryptography;
 
 namespace backend_01.Core.User.Service
 {
-    public class UserService
+    public class StaffService
     {
-        private readonly UserRepository _userRepo;
+        private readonly StaffRepository _staffRepo;
         private readonly TokenService _token;
 
         private readonly ApplicationDbContext _context;
 
-        public UserService(UserRepository userRepository,TokenService token,ApplicationDbContext context)
+        public StaffService(StaffRepository staffRepository,TokenService token,ApplicationDbContext context)
         {
-            _userRepo = userRepository;
+            _staffRepo = staffRepository;
             _token = token;
             _context = context;
         }
 
-        public async Task<UserResponse.GetUser> CreateUser(UserRequest.CreateUser user)
+        public async Task<StaffResponse.GetStaff> CreateStaff(StaffRequest.CreateStaff staff)
         {
-            string password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            string password = BCrypt.Net.BCrypt.HashPassword(staff.Password);
 
-            var newUser = new UserModel
+            var newStaff = new StaffModel
             {
-                UserName = user.UserName,
-                Email = user.Email,
+                UserName = staff.UserName,
+                Email = staff.Email,
                 Password = password,
                 CreatedAt = DateTime.UtcNow,
-                Role = user.Role,
+                Role = staff.Role,
             };
-            var result = await _userRepo.CreateUser(newUser);
-            var res = new UserResponse.GetUser()
+            var result = await _staffRepo.CreateStaff(newStaff);
+            var res = new StaffResponse.GetStaff()
             {
                 Id = result.Id,
                 UserName = result.UserName,
@@ -49,32 +49,32 @@ namespace backend_01.Core.User.Service
             return res;
         }
 
-        public async Task<UserResponse.LoginUser> login(UserRequest.LoginUser user)
+        public async Task<StaffResponse.LoginStaff> login(StaffRequest.LoginStaff staf)
         {
-            var dbUser = await _userRepo.checkEmail(user.Email);
-            if (dbUser == null)
+            var dbStaff = await _staffRepo.checkEmail(staf.Email);
+            if (dbStaff == null)
             {
                 throw new Exception("No User Found");
             }
-            var checkPassword = await _userRepo.checkPassword(user.Password, dbUser.Password);
+            var checkPassword = await _staffRepo.checkPassword(staf.Password, dbStaff.Password);
             if (!checkPassword)
             {
                 throw new Exception($"Incorrect Password ");
             }
 
 
-            var accessToken = _token.GenerateAccessToken(dbUser.Id, dbUser.UserName, dbUser.Email,dbUser.Role.ToString());
+            var accessToken = _token.GenerateAccessToken(dbStaff.Id, dbStaff.UserName, dbStaff.Email,dbStaff.Role.ToString());
             var refreshToken = _token.generateRefreshToken();
 
-            dbUser.RefreshToken = refreshToken;
-            _context.Users.Update(dbUser);
+            dbStaff.RefreshToken = refreshToken;
+            _context.Staffs.Update(dbStaff);
             await _context.SaveChangesAsync();
-            var loginRes = new UserResponse.LoginUser()
+            var loginRes = new StaffResponse.LoginStaff()
             {
-                Id = dbUser.Id,
-                UserName = dbUser.UserName,
-                Email = dbUser.Email,
-                role = dbUser.Role,
+                Id = dbStaff.Id,
+                UserName = dbStaff.UserName,
+                Email = dbStaff.Email,
+                role = dbStaff.Role,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken
 
@@ -83,10 +83,10 @@ namespace backend_01.Core.User.Service
 
         }
 
-        public async Task<UserResponse.GetUser> getMyself(int id)
+        public async Task<StaffResponse.GetStaff> getMyself(int id)
         {
-            var user = await _userRepo.getMyself(id);
-            var res = new UserResponse.GetUser()
+            var user = await _staffRepo.getMyself(id);
+            var res = new StaffResponse.GetStaff()
             {
                 Id = user.Id,
                 UserName = user.UserName,
@@ -97,12 +97,12 @@ namespace backend_01.Core.User.Service
             return res;
         }
 
-         public async Task<UserModel> getUserAllDetails(int id)
+         public async Task<StaffModel> getUserAllDetails(int id)
         {
-            var requestedUser = await _userRepo.getMyself(id);
-            return requestedUser; 
+            var requestedStaff = await _staffRepo.getMyself(id);
+            return requestedStaff; 
         }
-         public async Task<string> createCashierPin(UserRequest.CreatePin pin,int Id)
+         public async Task<string> createCashierPin(StaffRequest.CreatePin pin,int Id)
         {
             var createdCashierPin = string.Empty;
             if (string.IsNullOrWhiteSpace(pin.Pin))
@@ -120,13 +120,13 @@ namespace backend_01.Core.User.Service
             {
                 createdCashierPin = pin.Pin;
             }
-            var cashierDetails = await _userRepo.getMyself(Id);
+            var cashierDetails = await _staffRepo.getMyself(Id);
             if (cashierDetails == null)
             {
                 throw new Exception("Casher Not Found");
             }
             cashierDetails.CashierPin = createdCashierPin;
-            _context.Users.Update(cashierDetails);
+            _context.Staffs.Update(cashierDetails);
             await _context.SaveChangesAsync();
             return createdCashierPin;
             

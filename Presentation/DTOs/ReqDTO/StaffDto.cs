@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using backend_01.Core.User.Model;
 
-namespace backend_01.Presentation.Request.User.Dto{
-    public class UserRequest
+namespace backend_01.Presentation.Request.Staff.Dto{
+    public class StaffRequest
     {
-        public class CreateUser
+        public class CreateStaff
         {
 
             public required string UserName { get; set; }
@@ -15,7 +15,7 @@ namespace backend_01.Presentation.Request.User.Dto{
             [JsonConverter(typeof(JsonStringEnumConverter))]
             public required Roles Role { get; set; }
         }
-        public class LoginUser
+        public class LoginStaff
         {
             public required string Email { get; set; }
             public required string Password { get; set; }

@@ -10,6 +10,6 @@ namespace backend_01.Core.Category.Model{
         
         public ICollection<MenuModel>? MenuList { get; set; }
         public int CreatedById { get; set; }
-        public UserModel? CreatedBy{ get; set; }
+        public StaffModel? CreatedBy{ get; set; }
     }
 }

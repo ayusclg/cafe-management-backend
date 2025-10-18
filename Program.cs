@@ -57,7 +57,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddAuthorization();
-builder.Services.AddScoped<UserRepository, UserRepository>();
+builder.Services.AddScoped<StaffRepository, StaffRepository>();
 builder.Services.AddScoped<MenuRepository, MenuRepository>();
 builder.Services.AddScoped<CategoryRepository, CategoryRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -107,7 +107,7 @@ builder.Services.AddSwaggerGen(c =>
 
 //registering userService
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<StaffService>();
 builder.Services.AddScoped<MenuService>();
 builder.Services.AddScoped<CategoryService>();
 //this is for the documentation

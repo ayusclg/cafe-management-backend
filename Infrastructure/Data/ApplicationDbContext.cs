@@ -11,14 +11,14 @@ namespace backend_01.Infrastructure.Data
         {
 
         }
-        public DbSet<UserModel> Users { get; set; }
+        public DbSet<StaffModel> Staffs { get; set; }
         public DbSet<MenuModel> Menus { get; set; }
 
         public DbSet<CategoryModel> Category{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserModel>().Property(O => O.Role).HasConversion<string>();
+            modelBuilder.Entity<StaffModel>().Property(O => O.Role).HasConversion<string>();
         }
     }
     
