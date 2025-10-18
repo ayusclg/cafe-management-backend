@@ -17,7 +17,7 @@ namespace backend_01.Core.Menu.Service
             var newMenu = new MenuModel
             {
                 MenuName = menu.MenuName,
-                Price = menu.Price,
+                Price = Convert.ToDecimal(menu.Price) ,
                 Ingredients = menu.Ingredients,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -27,7 +27,7 @@ namespace backend_01.Core.Menu.Service
             {
                 Id = result.Id,
                 MenuName = result.MenuName,
-                Price = result.Price,
+                Price = Convert.ToString(result.Price),
                 Ingredients = result.Ingredients,
                 CreatedAt = result.CreatedAt,
                 UpdatedAt = result.UpdatedAt,

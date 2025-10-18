@@ -1,3 +1,4 @@
+using backend_01.Core.Category.Model;
 using backend_01.Core.Menu.Model;
 using backend_01.Core.User.Model;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ namespace backend_01.Infrastructure.Data
         }
         public DbSet<UserModel> Users { get; set; }
         public DbSet<MenuModel> Menus { get; set; }
+
+        public DbSet<CategoryModel> Category{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
