@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using backend_01.Infrastructure.Token.Service;
 using backend_01.Infrastructure.Data;
 using System.Security.Cryptography;
-using backend_01.Migrations;
+ 
 
 namespace backend_01.Core.User.Service
 {

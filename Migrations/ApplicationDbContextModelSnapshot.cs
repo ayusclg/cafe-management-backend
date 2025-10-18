@@ -23,6 +23,31 @@ namespace backend_01.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("backend_01.Core.Category.Model.CategoryModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("backend_01.Core.Menu.Model.MenuModel", b =>
                 {
                     b.Property<int>("Id")
@@ -30,6 +55,9 @@ namespace backend_01.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -42,14 +70,15 @@ namespace backend_01.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Price")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Menus");
                 });
@@ -90,6 +119,38 @@ namespace backend_01.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("backend_01.Core.Category.Model.CategoryModel", b =>
+                {
+                    b.HasOne("backend_01.Core.User.Model.UserModel", "CreatedBy")
+                        .WithMany("CategoryCreated")
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("backend_01.Core.Menu.Model.MenuModel", b =>
+                {
+                    b.HasOne("backend_01.Core.Category.Model.CategoryModel", "Category")
+                        .WithMany("MenuList")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("backend_01.Core.Category.Model.CategoryModel", b =>
+                {
+                    b.Navigation("MenuList");
+                });
+
+            modelBuilder.Entity("backend_01.Core.User.Model.UserModel", b =>
+                {
+                    b.Navigation("CategoryCreated");
                 });
 #pragma warning restore 612, 618
         }

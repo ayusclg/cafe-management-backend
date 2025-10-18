@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using backend_01.Infrastructure.Token.Service;
+using backend_01.Core.Category.Service;
+using backend_01.Infrastructure.Category.Repository;
 
 
 
@@ -57,6 +59,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<UserRepository, UserRepository>();
 builder.Services.AddScoped<MenuRepository, MenuRepository>();
+builder.Services.AddScoped<CategoryRepository, CategoryRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -104,8 +107,9 @@ builder.Services.AddSwaggerGen(c =>
 
 //registering userService
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<UserService>(); 
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<MenuService>();
+builder.Services.AddScoped<CategoryService>();
 //this is for the documentation
 
 
